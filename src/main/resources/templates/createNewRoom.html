@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Create new room</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+</head>
+<body>
+<div class="content">
+    <h2>Rooms with the light bulbs</h2>
+    <form class="menu-form" th:action="@{/createNewRoomSubmit}" method="POST">
+        <label>
+            Name: <br>
+            <input type="text" name="name">
+        </label> <br>
+        <label>
+            Country: <br>
+            <select name="country" id="country">
+                <dl th:each="country : ${mapCountries}">
+                    <dt>
+                        <option th:text="${country.key}"></option>
+                    </dt>
+                </dl>
+            </select>
+        </label> <br>
+        <input type="submit" value="Create">
+    </form>
+    <form class="menu-form" th:action="@{/index}" method="GET">
+        <input type="submit" value="main page"/>
+    </form>
+</div>
+</body>
+</html>

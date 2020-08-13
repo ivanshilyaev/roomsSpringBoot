@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Menu</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+</head>
+<body>
+<div class="content">
+    <h2>Rooms with the light bulbs</h2>
+    <form class="menu-form" th:action="@{/createNewRoom}" method="GET">
+        <input type="submit" value="create new room"/>
+    </form>
+    <form class="menu-form" th:action="@{/listOfAllRooms}" method="GET">
+        <input type="submit" value="list of all rooms"/>
+    </form>
+</div>
+</body>
+</html>
