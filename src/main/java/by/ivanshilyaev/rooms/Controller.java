@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +21,23 @@ import java.util.*;
 @RequestMapping("/")
 public class Controller {
     private RoomRepository roomRepository;
+    private Map<String, String> mapCountries = new TreeMap<>();
 
     @Autowired
     public Controller(RoomRepository roomRepository) {
         this.roomRepository = roomRepository;
+        getAllCountries();
+    }
+
+    private void getAllCountries() {
+        String[] countryCodes = Locale.getISOCountries();
+        mapCountries = new TreeMap<>();
+        for (String countryCode : countryCodes) {
+            Locale locale = new Locale("", countryCode);
+            String code = locale.getCountry();
+            String countryName = locale.getDisplayCountry();
+            mapCountries.put(countryName, code);
+        }
     }
 
     @RequestMapping(value = "/index", method = RequestMethod.GET)
@@ -33,14 +47,6 @@ public class Controller {
 
     @RequestMapping(value = "/createNewRoom", method = RequestMethod.GET)
     public String createNewRoom(Model model) {
-        String[] countryCodes = Locale.getISOCountries();
-        Map<String, String> mapCountries = new TreeMap<>();
-        for (String countryCode : countryCodes) {
-            Locale locale = new Locale("", countryCode);
-            String code = locale.getCountry();
-            String countryName = locale.getDisplayCountry();
-            mapCountries.put(countryName, code);
-        }
         model.addAttribute("mapCountries", mapCountries);
         try (Scanner s = new java.util.Scanner(new URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
             String ip = s.next();
@@ -56,7 +62,13 @@ public class Controller {
     }
 
     @RequestMapping(value = "/createNewRoomSubmit", method = RequestMethod.POST)
-    public String createNewRoomSubmit() {
+    public String createNewRoomSubmit(@RequestParam(name = "name") String name,
+                                      @RequestParam(name = "country") String country) {
+        Room room = new Room();
+        room.setName(name);
+        room.setCountry(mapCountries.get(country));
+        room.setLamp(true);
+        roomRepository.save(room);
         return "redirect:/listOfAllRooms";
     }
 
