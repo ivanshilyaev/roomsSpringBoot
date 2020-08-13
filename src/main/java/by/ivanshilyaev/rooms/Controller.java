@@ -7,9 +7,7 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CountryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,12 +18,12 @@ import java.util.*;
 @org.springframework.stereotype.Controller
 @RequestMapping("/")
 public class Controller {
-    private RoomRepository roomRepository;
+    public static RoomRepository roomRepository;
     private Map<String, String> mapCountries = new TreeMap<>();
 
     @Autowired
-    public Controller(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
+    public Controller(RoomRepository repository) {
+        roomRepository = repository;
         getAllCountries();
     }
 
@@ -77,5 +75,11 @@ public class Controller {
         List<Room> rooms = (List<Room>) roomRepository.findAll();
         model.addAttribute("rooms", rooms);
         return "listOfAllRooms";
+    }
+
+    @PostMapping("/room")
+    public String room(@ModelAttribute("roomId") Long roomId, Model model) {
+        model.addAttribute("roomId", roomId);
+        return "room";
     }
 }

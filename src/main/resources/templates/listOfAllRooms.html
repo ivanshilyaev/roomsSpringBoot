@@ -9,7 +9,8 @@
     <div th:unless="${#lists.isEmpty(rooms)}">
         <dl th:each="room : ${rooms}">
             <dt>
-                <form class="menu-form" method="GET">
+                <form action="#" class="menu-form" th:action="@{/room}" method="POST">
+                    <input type="hidden" name="roomId" th:value="${room.id}">
                     <input type="submit" th:value="${room.name}"/>
                 </form>
             </dt>

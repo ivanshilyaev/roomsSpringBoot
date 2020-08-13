@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Room</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+    <script type="text/javascript" th:href="@{/websocket.js}"></script>
+</head>
+<body>
+<div class="content">
+    <img id="img-id" src="" alt="">
+    <div class="lamp-description">
+        <br>
+        Room id: <span id="p-roomId" th:text="${roomId}"></span>
+        <br><br>
+        <button id="button-id"></button>
+        <br><br>
+        <form class="menu-form" th:action="@{/index}" method="GET">
+            <input type="submit" value="main page">
+        </form>
+        <form class="menu-form" th:action="@{/listOfAllRooms}" method="GET">
+            <input type="submit" value="list of all rooms">
+        </form>
+    </div>
+</div>
+</body>
+</html>
