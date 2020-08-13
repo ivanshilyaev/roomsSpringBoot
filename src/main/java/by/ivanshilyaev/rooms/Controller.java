@@ -1,22 +1,28 @@
 package by.ivanshilyaev.rooms;
 
+import by.ivanshilyaev.rooms.bean.Room;
 import by.ivanshilyaev.rooms.dao.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-@SpringBootApplication
-public class Controller implements CommandLineRunner {
-    @Autowired
+import java.util.List;
+
+@org.springframework.stereotype.Controller
+@RequestMapping("/")
+public class Controller {
     private RoomRepository roomRepository;
 
-    public static void main(String[] args) {
-        SpringApplication.run(Controller.class, args);
+    @Autowired
+    public Controller(RoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        System.out.println(roomRepository.findAll());
+    @RequestMapping(value = "/listOfAllRooms", method = RequestMethod.GET)
+    public String listOfAllRooms(Model model) {
+        List<Room> rooms = (List<Room>) roomRepository.findAll();
+        model.addAttribute("rooms", rooms);
+        return "listOfAllRooms";
     }
 }

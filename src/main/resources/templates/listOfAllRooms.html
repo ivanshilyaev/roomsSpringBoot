@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>List of all rooms</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+</head>
+<body>
+<div class="content">
+    <h2>List of all rooms</h2>
+    <div th:unless="${#lists.isEmpty(rooms)}">
+        <dl th:each="room : ${rooms}">
+            <dt>
+                <form class="menu-form" method="GET">
+                    <input type="submit" th:value="${room.name}"/>
+                </form>
+            </dt>
+        </dl>
+    </div>
+</div>
+</body>
+</html>
