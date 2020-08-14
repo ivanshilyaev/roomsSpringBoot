@@ -15,9 +15,16 @@
             Country: <br>
             <select name="country" id="country">
                 <dl th:each="country : ${mapCountries}">
-                    <dt>
-                        <option th:text="${country.key}"></option>
-                    </dt>
+                    <div th:if="${userCountry} == ${country.value}">
+                        <dt>
+                            <option selected th:text="${country.key}"></option>
+                        </dt>
+                    </div>
+                    <div th:unless="${userCountry} == ${country.value}">
+                        <dt>
+                            <option th:text="${country.key}"></option>
+                        </dt>
+                    </div>
                 </dl>
             </select>
         </label> <br>
