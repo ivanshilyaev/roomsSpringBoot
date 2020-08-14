@@ -20,14 +20,19 @@ import java.util.*;
 public class Controller {
     public static RoomService roomService;
     private Map<String, String> mapCountries = new TreeMap<>();
+    private DatabaseReader reader;
 
     @Autowired
     public Controller(RoomService service) {
         roomService = service;
-        getAllCountries();
+        getAllCountriesAndCodes();
+        try {
+            initDatabaseReader();
+        } catch (IOException ignored) {
+        }
     }
 
-    private void getAllCountries() {
+    private void getAllCountriesAndCodes() {
         String[] countryCodes = Locale.getISOCountries();
         mapCountries = new TreeMap<>();
         for (String countryCode : countryCodes) {
@@ -38,28 +43,36 @@ public class Controller {
         }
     }
 
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    private void initDatabaseReader() throws IOException {
+        File database = new File("src/main/resources/GeoLite2-Country.mmdb");
+        reader = new DatabaseReader.Builder(database).build();
+    }
+
+    private String getUserCountryCode() {
+        try (Scanner s = new java.util.Scanner(new URL("https://api.ipify.org").openStream(),
+                "UTF-8").useDelimiter("\\A")) {
+            String ip = s.next();
+            InetAddress inetAddress = InetAddress.getByName(ip);
+            CountryResponse countryResponse = reader.country(inetAddress);
+            return countryResponse.getCountry().getIsoCode();
+        } catch (IOException | GeoIp2Exception ignored) {
+        }
+        return "";
+    }
+
+    @GetMapping("/index")
     public String index() {
         return "index";
     }
 
-    @RequestMapping(value = "/createNewRoom", method = RequestMethod.GET)
+    @GetMapping("/createNewRoom")
     public String createNewRoom(Model model) {
         model.addAttribute("mapCountries", mapCountries);
-        try (Scanner s = new java.util.Scanner(new URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
-            String ip = s.next();
-            File database = new File("src/main/resources/GeoLite2-Country.mmdb");
-            DatabaseReader reader = new DatabaseReader.Builder(database).build();
-            InetAddress inetAddress = InetAddress.getByName(ip);
-            CountryResponse countryResponse = reader.country(inetAddress);
-            String userCountry = countryResponse.getCountry().getName();
-            model.addAttribute("userCountry", userCountry);
-        } catch (IOException | GeoIp2Exception e) {
-        }
+        model.addAttribute("userCountry", getUserCountryCode());
         return "createNewRoom";
     }
 
-    @RequestMapping(value = "/createNewRoomSubmit", method = RequestMethod.POST)
+    @PostMapping("/createNewRoomSubmit")
     public String createNewRoomSubmit(@RequestParam(name = "name") String name,
                                       @RequestParam(name = "country") String country) {
         Room room = new Room();
@@ -70,7 +83,7 @@ public class Controller {
         return "redirect:/listOfAllRooms";
     }
 
-    @RequestMapping(value = "/listOfAllRooms", method = RequestMethod.GET)
+    @GetMapping("/listOfAllRooms")
     public String listOfAllRooms(Model model) {
         List<Room> rooms = roomService.findAll();
         model.addAttribute("rooms", rooms);
@@ -79,7 +92,17 @@ public class Controller {
 
     @PostMapping("/room")
     public String room(@ModelAttribute("roomId") Long roomId, Model model) {
+        Room room = roomService.findById(roomId).get();
+        String userCountry = getUserCountryCode();
+        if (!room.getCountry().equals(userCountry)) {
+            return "redirect:/error403";
+        }
         model.addAttribute("roomId", roomId);
         return "room";
+    }
+
+    @GetMapping("/")
+    public String error() {
+        return "error404";
     }
 }
