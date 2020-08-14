@@ -95,14 +95,14 @@ public class Controller {
         Room room = roomService.findById(roomId).get();
         String userCountry = getUserCountryCode();
         if (!room.getCountry().equals(userCountry)) {
-            return "redirect:/error403";
+            return "error403";
         }
         model.addAttribute("roomId", roomId);
         return "room";
     }
 
-    @GetMapping("/")
-    public String error() {
-        return "error404";
-    }
+//    @RequestMapping("/error")
+//    public String error() {
+//        return "error404";
+//    }
 }
