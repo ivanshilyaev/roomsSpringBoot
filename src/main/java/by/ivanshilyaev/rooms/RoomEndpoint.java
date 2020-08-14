@@ -2,6 +2,7 @@ package by.ivanshilyaev.rooms;
 
 import by.ivanshilyaev.rooms.bean.Lamp;
 import by.ivanshilyaev.rooms.bean.Room;
+import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+@Component
 @ServerEndpoint(value = "/room/{roomId}", encoders = LampEncoder.class, decoders = LampDecoder.class)
 public class RoomEndpoint {
     private Session session;
@@ -22,7 +24,6 @@ public class RoomEndpoint {
     public void onOpen(Session session, @PathParam("roomId") Long roomId) throws IOException, EncodeException {
         this.session = session;
         this.roomId = roomId;
-        System.out.println("HERE");
         if (repository.containsKey(roomId)) {
             repository.get(roomId).add(this);
         } else {

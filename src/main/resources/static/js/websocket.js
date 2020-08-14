@@ -4,14 +4,14 @@ window.onload = function () {
     const host = document.location.host;
     const pathname = document.location.pathname;
 
-    const roomId = document.getElementById("p-roomId").textContent;
+    const roomId = document.getElementById("p-roomId").innerText;
 
     ws = new WebSocket("ws://" + host + pathname + "/" + roomId);
 
     console.log(ws);
 
     ws.onmessage = function (event) {
-        const room = JSON.parse(event.data);
+        const lamp = JSON.parse(event.data);
         const button = document.getElementById("button-id");
         if (lamp.state.localeCompare("On") === 0) {
             button.innerHTML = "On";

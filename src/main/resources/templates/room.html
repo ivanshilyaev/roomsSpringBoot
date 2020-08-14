@@ -2,14 +2,14 @@
 <head>
     <title>Room</title>
     <link rel="stylesheet" th:href="@{/style.css}"/>
-    <script type="text/javascript" th:href="@{/websocket.js}"></script>
+    <script type="text/javascript" th:src="@{/js/websocket.js}"></script>
 </head>
 <body>
 <div class="content">
     <img id="img-id" src="" alt="">
     <div class="lamp-description">
         <br>
-        Room id: <span id="p-roomId" th:text="${roomId}"></span>
+        Room id: <span id="p-roomId">[[${roomId}]]</span>
         <br><br>
         <button id="button-id"></button>
         <br><br>
