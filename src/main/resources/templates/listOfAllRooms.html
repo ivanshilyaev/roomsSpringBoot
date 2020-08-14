@@ -7,11 +7,12 @@
 <div class="content">
     <h2>List of all rooms</h2>
     <div th:unless="${#lists.isEmpty(rooms)}">
-        <dl th:each="room : ${rooms}">
+        <dl th:each="room: ${rooms}">
             <dt>
                 <form action="#" class="menu-form" th:action="@{/room}" method="POST">
                     <input type="hidden" name="roomId" th:value="${room.id}">
-                    <input type="submit" th:value="${room.name}"/>
+                    <input style="all: unset" type="text" th:value="${room.country}" readonly>
+                    <input type="submit" th:value="${room.name}">
                 </form>
             </dt>
         </dl>
