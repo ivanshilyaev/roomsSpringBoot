@@ -1,7 +1,7 @@
 package by.ivanshilyaev.rooms;
 
 import by.ivanshilyaev.rooms.bean.Room;
-import by.ivanshilyaev.rooms.dao.RoomRepository;
+import by.ivanshilyaev.rooms.service.RoomService;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CountryResponse;
@@ -18,12 +18,12 @@ import java.util.*;
 @org.springframework.stereotype.Controller
 @RequestMapping("/")
 public class Controller {
-    public static RoomRepository roomRepository;
+    public static RoomService roomService;
     private Map<String, String> mapCountries = new TreeMap<>();
 
     @Autowired
-    public Controller(RoomRepository repository) {
-        roomRepository = repository;
+    public Controller(RoomService service) {
+        roomService = service;
         getAllCountries();
     }
 
@@ -66,13 +66,13 @@ public class Controller {
         room.setName(name);
         room.setCountry(mapCountries.get(country));
         room.setLamp(true);
-        roomRepository.save(room);
+        roomService.save(room);
         return "redirect:/listOfAllRooms";
     }
 
     @RequestMapping(value = "/listOfAllRooms", method = RequestMethod.GET)
     public String listOfAllRooms(Model model) {
-        List<Room> rooms = (List<Room>) roomRepository.findAll();
+        List<Room> rooms = roomService.findAll();
         model.addAttribute("rooms", rooms);
         return "listOfAllRooms";
     }

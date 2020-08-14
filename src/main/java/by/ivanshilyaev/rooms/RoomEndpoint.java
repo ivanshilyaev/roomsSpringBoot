@@ -32,7 +32,7 @@ public class RoomEndpoint {
             repository.put(roomId, roomEndpoints);
         }
         Lamp currentLamp = new Lamp();
-        Room currentRoom = Controller.roomRepository.findById(roomId).get();
+        Room currentRoom = Controller.roomService.findById(roomId).get();
         if (currentRoom.isLamp()) {
             currentLamp.setState("On");
         }
@@ -50,9 +50,9 @@ public class RoomEndpoint {
         } else {
             response.setState("On");
         }
-        Room room = Controller.roomRepository.findById(roomId).get();
+        Room room = Controller.roomService.findById(roomId).get();
         room.setLamp(!room.isLamp());
-        Controller.roomRepository.save(room);
+        Controller.roomService.save(room);
         broadcast(response, roomId);
     }
 
