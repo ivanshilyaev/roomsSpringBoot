@@ -1,6 +1,6 @@
-package by.ivanshilyaev.rooms;
+package by.ivanshilyaev.rooms.utils;
 
-import by.ivanshilyaev.rooms.bean.Lamp;
+import by.ivanshilyaev.rooms.entity.Lamp;
 import com.google.gson.Gson;
 
 import javax.websocket.EncodeException;

@@ -1,6 +1,6 @@
 package by.ivanshilyaev.rooms.service;
 
-import by.ivanshilyaev.rooms.bean.Room;
+import by.ivanshilyaev.rooms.entity.Room;
 import by.ivanshilyaev.rooms.dao.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,8 @@
-package by.ivanshilyaev.rooms;
+package by.ivanshilyaev.rooms.utils;
 
-import by.ivanshilyaev.rooms.bean.Lamp;
-import by.ivanshilyaev.rooms.bean.Room;
+import by.ivanshilyaev.rooms.controller.Controller;
+import by.ivanshilyaev.rooms.entity.Lamp;
+import by.ivanshilyaev.rooms.entity.Room;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;

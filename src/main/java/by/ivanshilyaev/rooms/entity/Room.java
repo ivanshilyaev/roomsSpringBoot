@@ -1,4 +1,4 @@
-package by.ivanshilyaev.rooms.bean;
+package by.ivanshilyaev.rooms.entity;
 
 import lombok.Data;
 

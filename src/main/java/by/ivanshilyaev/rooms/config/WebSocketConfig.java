@@ -1,4 +1,4 @@
-package by.ivanshilyaev.rooms;
+package by.ivanshilyaev.rooms.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package by.ivanshilyaev.rooms;
+package by.ivanshilyaev.rooms.controller;
 
-import by.ivanshilyaev.rooms.bean.Room;
+import by.ivanshilyaev.rooms.entity.Room;
 import by.ivanshilyaev.rooms.service.RoomService;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.exception.GeoIp2Exception;

@@ -1,6 +1,6 @@
 package by.ivanshilyaev.rooms.dao;
 
-import by.ivanshilyaev.rooms.bean.Room;
+import by.ivanshilyaev.rooms.entity.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
