@@ -7,13 +7,23 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CountryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/")
@@ -73,7 +83,7 @@ public class Controller {
     }
 
     @PostMapping("/createNewRoomSubmit")
-    public String createNewRoomSubmit(@RequestParam(name = "name") String name,
+    public String createNewRoomSubmit(@RequestParam(name = "name") @Min(1) @Max(20) String name,
                                       @RequestParam(name = "country") String country) {
         Room room = new Room();
         room.setName(name);
@@ -100,9 +110,4 @@ public class Controller {
         model.addAttribute("roomId", roomId);
         return "room";
     }
-
-//    @RequestMapping("/error")
-//    public String error() {
-//        return "error404";
-//    }
 }

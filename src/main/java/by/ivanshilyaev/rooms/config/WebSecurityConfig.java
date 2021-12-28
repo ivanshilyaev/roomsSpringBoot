@@ -10,9 +10,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                //.csrf().disable()
                 .headers()
-                .contentSecurityPolicy("script-src 'self' https://trustedscripts.example.com; " +
-                        "object-src https://trustedplugins.example.com; report-uri /csp-report-endpoint/");
+                .contentSecurityPolicy("script-src 'self'")
+                .and()
+                .contentTypeOptions()
+                .and()
+                .xssProtection()
+                .and()
+                .cacheControl()
+                .and()
+                .httpStrictTransportSecurity();
     }
 }
