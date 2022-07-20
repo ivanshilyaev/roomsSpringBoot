@@ -2,16 +2,16 @@ package by.ivanshilyaev.rooms.service;
 
 import by.ivanshilyaev.rooms.entity.Room;
 import by.ivanshilyaev.rooms.dao.RoomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RoomService {
-    @Autowired
-    private RoomRepository roomRepository;
+
+    private final RoomRepository roomRepository;
 
     public void save(Room room) {
         roomRepository.save(room);
@@ -21,7 +21,7 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
-    public Optional<Room> findById(Long id) {
-        return roomRepository.findById(id);
+    public Room getById(Long id) {
+        return roomRepository.getById(id);
     }
 }

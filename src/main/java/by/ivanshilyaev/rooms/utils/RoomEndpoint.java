@@ -1,6 +1,6 @@
 package by.ivanshilyaev.rooms.utils;
 
-import by.ivanshilyaev.rooms.controller.Controller;
+import by.ivanshilyaev.rooms.controller.RoomController;
 import by.ivanshilyaev.rooms.entity.Lamp;
 import by.ivanshilyaev.rooms.entity.Room;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 @ServerEndpoint(value = "/room/{roomId}", encoders = LampEncoder.class, decoders = LampDecoder.class)
 public class RoomEndpoint {
+
     private Session session;
+
     private Long roomId;
+
     private static final Map<Long, Set<RoomEndpoint>> repository = new ConcurrentHashMap<>();
 
     @OnOpen
@@ -33,11 +36,10 @@ public class RoomEndpoint {
             repository.put(roomId, roomEndpoints);
         }
         Lamp currentLamp = new Lamp();
-        Room currentRoom = Controller.roomService.findById(roomId).get();
-        if (currentRoom.isLamp()) {
+        Room currentRoom = RoomController.roomService.getById(roomId);
+        if (currentRoom.isLampOn()) {
             currentLamp.setState("On");
-        }
-        else {
+        } else {
             currentLamp.setState("Off");
         }
         session.getBasicRemote().sendObject(currentLamp);
@@ -51,9 +53,9 @@ public class RoomEndpoint {
         } else {
             response.setState("On");
         }
-        Room room = Controller.roomService.findById(roomId).get();
-        room.setLamp(!room.isLamp());
-        Controller.roomService.save(room);
+        Room room = RoomController.roomService.getById(roomId);
+        room.setLampOn(!room.isLampOn());
+        RoomController.roomService.save(room);
         broadcast(response, roomId);
     }
 
@@ -72,8 +74,7 @@ public class RoomEndpoint {
         roomEndpoints.forEach(endpoint -> {
             synchronized (endpoint) {
                 try {
-                    endpoint.session.getBasicRemote()
-                            .sendObject(lamp);
+                    endpoint.session.getBasicRemote().sendObject(lamp);
                 } catch (IOException | EncodeException e) {
                     e.printStackTrace();
                 }

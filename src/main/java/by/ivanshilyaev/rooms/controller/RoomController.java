@@ -27,13 +27,13 @@ import java.util.TreeMap;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/")
-public class Controller {
+public class RoomController {
     public static RoomService roomService;
     private Map<String, String> mapCountries = new TreeMap<>();
     private DatabaseReader reader;
 
     @Autowired
-    public Controller(RoomService service) {
+    public RoomController(RoomService service) {
         roomService = service;
         getAllCountriesAndCodes();
         try {
@@ -60,7 +60,7 @@ public class Controller {
 
     private String getUserCountryCode() {
         try (Scanner s = new java.util.Scanner(new URL("https://api.ipify.org").openStream(),
-                "UTF-8").useDelimiter("\\A")) {
+            "UTF-8").useDelimiter("\\A")) {
             String ip = s.next();
             InetAddress inetAddress = InetAddress.getByName(ip);
             CountryResponse countryResponse = reader.country(inetAddress);
@@ -83,12 +83,14 @@ public class Controller {
     }
 
     @PostMapping("/createNewRoomSubmit")
-    public String createNewRoomSubmit(@RequestParam(name = "name") @Min(1) @Max(20) String name,
-                                      @RequestParam(name = "country") String country) {
+    public String createNewRoomSubmit(
+        @RequestParam(name = "name") @Min(1) @Max(20) String name,
+        @RequestParam(name = "country") String country
+    ) {
         Room room = new Room();
         room.setName(name);
         room.setCountry(mapCountries.get(country));
-        room.setLamp(true);
+        room.setLampOn(true);
         roomService.save(room);
         return "redirect:/listOfAllRooms";
     }
@@ -102,7 +104,7 @@ public class Controller {
 
     @PostMapping("/room")
     public String room(@ModelAttribute("roomId") Long roomId, Model model) {
-        Room room = roomService.findById(roomId).get();
+        Room room = roomService.getById(roomId);
         String userCountry = getUserCountryCode();
         if (!room.getCountry().equals(userCountry)) {
             return "error403";
